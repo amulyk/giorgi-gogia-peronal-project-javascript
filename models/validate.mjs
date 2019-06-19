@@ -1,6 +1,16 @@
 export function validate(schema, data, flag = false) {
     if (flag == false) {
         for (let i = 0; i < Object.keys(schema).length ; i++) {
+            if(Object.keys(data)[i] === 'dateOfBirth') {
+                if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(data[Object.keys(data)[i]])) {
+                    throw new Error("The date format should be 'mm/dd/yyyy'")
+                }
+            }
+            if(Object.keys(data)[i] === 'sex') {
+                if(data[Object.keys(data)[i]] !== 'male' && data[Object.keys(data)[i]] !== 'female') {
+                    throw new Error('The sex should be either male or female')
+                }
+            }
             if(Array.isArray(data[Object.keys(data)[i]])) {
                 for (let i = 0 ; i < data[Object.keys(data)[i]].length ; i++) {
                     validate (schema[Object.keys(schema)[i]] , data[Object.keys(data)[i]])
@@ -19,6 +29,16 @@ export function validate(schema, data, flag = false) {
     }
     else {
         for (let i = 0; i < Object.keys(schema).length; i++) {
+            if(Object.keys(data)[i] === 'dateOfBirth') {
+                if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(data[Object.keys(data)[i]])) {
+                    throw new Error("The date format should be 'mm/dd/yyyy'")
+                }
+            }
+            if(Object.keys(data)[i] === 'sex') {
+                if(data[Object.keys(data)[i]] !== 'male' && data[Object.keys(data)[i]] !== 'female') {
+                    throw new Error('The sex should be either male or female')
+                }
+            }
             if(Array.isArray(data[Object.keys(data)[i]])) {
                 for (let i = 0 ; i < data[Object.keys(data)[i]].length ; i++) {
                     validate (schema[Object.keys(schema)[i]], data[Object.keys(data)[i]], true)

@@ -32,18 +32,6 @@ export class TeachersModel {
         }
     }
 
-    _validateDate(date) {
-        if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) {
-            throw new Error("The date format should be 'mm/dd/yyyy'")
-        }
-    }
-
-    _validateSex(sex) {
-        if(sex !== 'male' || sex !== 'female') {
-            throw new Error('The sex should be either male or female')
-        }
-    }
-
     add(data) {
         return new Promise((resolve, reject) => {
             if(validate(this.schema, data)) {
@@ -70,16 +58,41 @@ export class TeachersModel {
         });
     }
 
-    update(id, newProfile) {
+    // update(id, newProfile) {
+    //     return new Promise((resolve, reject) => {
+    //       if(!this.map.get(id)) {
+    //         reject("This id doesn't exist in the database");
+    //       }
+    //       if(validate (this.schema, newProfile, true)) {
+    //         let oldProfile = this.map.get(id);
+    //           resolve(this.map.set(id, {...oldProfile, ...newProfile}));
+    //       }
+    //     });
+    // }
+
+    update (id, newProfile ) {
         return new Promise((resolve, reject) => {
-          if(!this.map.get(id)) {
-            reject("This id doesn't exist in the database");
-          }
-          if(validate (this.schema, newProfile, true)) {
+            if (!this.map.has(id)) {
+                reject("This id doesn't exist in the database");
+            }
+            if(validate (this.schema, newProfile, true)) {
               let oldProfile = this.map.get(id);
-              resolve(this.map.set(id, {...oldProfile, ...newProfile}));
-          }
-        });
+              for ( var i  = 0 ; i < Object.keys(newProfile).length; i++) {
+                  if(Array.isArray(newProfile[Object.keys(newProfile)[i]])) {
+                      for (let i = 0 ; i < newProfile[Object.keys(newProfile)[i]].length ; i++) {
+                          this.update(id, newProfile[Object.keys(newProfile)[i]])
+                      }
+                  }
+                  if (typeof newProfile[Object.keys(newProfile)[i]] == 'object') {
+                      this.update(id, newProfile[Object.keys(newProfile)[i]])
+                  }
+                  if (Object.keys(newProfile)[i] == Object.keys(oldProfile)[i] && validate (this.schema, newProfile, true)) {
+                      this.map.set(id, {...oldProfile, ...newProfile});
+                  }
+              }
+              resolve(id);
+        }
+      });
     }
 
     remove(id) {

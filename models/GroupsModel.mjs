@@ -66,15 +66,29 @@ export class GroupsModel {
         });
     }
 
-    update(groupId, newRoom) {
+    update (id, newProfile) {
         return new Promise((resolve, reject) => {
-            if(this.groups.has(groupId)) {
-                let oldRoom = this.groups.get(groupId);
-                resolve(this.groups.set(groupId, {...oldRoom, ...newRoom}));
-            } else {
+            if (!this.map.has(id)) {
                 reject("This id doesn't exist in the database");
             }
-        });
+            if(validate (this.schema, newProfile, true)) {
+                let oldProfile = this.map.get(id);
+                for ( var i  = 0 ; i < Object.keys(newProfile).length; i++) {
+                    if(Array.isArray(newProfile[Object.keys(newProfile)[i]])) {
+                        for (let i = 0 ; i < newProfile[Object.keys(newProfile)[i]].length ; i++) {
+                            this.update(id, newProfile[Object.keys(newProfile)[i]])
+                        }
+                    }
+                    if (typeof newProfile[Object.keys(newProfile)[i]] == 'object') {
+                        this.update(id, newProfile[Object.keys(newProfile)[i]])
+                    }
+                    if (Object.keys(newProfile)[i] == Object.keys(oldProfile)[i]) {
+                        this.map.set(id, {...oldProfile, ...newProfile});
+                    }
+                }
+                resolve(id);
+        }
+      });
     }
 
     readAll() {

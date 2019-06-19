@@ -1,22 +1,17 @@
+import {validate} from './validate';
+
 export class SubjectsModel {
-    constructor({title, lessons, description}) {
+    constructor(data) {
+        this.schema = {
+            "title": "string",
+            "lessons": "number",
+            "description": "string"
+        };
+        const {title, lessons, description} = data;
+        if(validate(this.schema, data))
         this.title = title;
         this.lessons = lessons;
         this.description = description;
         this.id = String(this.lessons + Math.random());
-    }
-
-    _validateInput(title, lessons, description) {
-        this._validate(title, 'string');
-        this._validate(lessons, 'number');
-        if(description) {
-            this._validate(description, 'string');
-        }
-    }
-
-    _validate(input, type){
-        if(typeof input !== type) {
-            throw new Error(`${input} should be type ${type}`)
-        }
     }
 }

@@ -44,11 +44,11 @@ let data1 =
     "last": "White"
     },
     "image": "image",
-    "dateOfBirth": "20-8-1996", 
+    "dateOfBirth": "20/8/1996", 
     "emails": [
     {
-        "email": "Oliver.white@gmail.com",
-        "primary": true
+        "email": "dhhty",
+        "primary": true,
     }
     ],
     "phones": [
@@ -72,7 +72,7 @@ let pupilData = {
     "dateOfBirth": "11/11/2000", // format date
     "phones": [
         {
-        "phone": "string",
+        "phone": "grgrg",
         "primary": true
         }
     ],
@@ -80,8 +80,8 @@ let pupilData = {
     "description": "string"
 };
 
-let data2 = {'description': 'poop',
-              'sex': 'mae'
+let data2 = {'description': 1,
+              'sex': 'male'
 };
 
 (async() => {
@@ -89,9 +89,9 @@ let data2 = {'description': 'poop',
 
     const teachers = new TeachersModel();
     const teacherId = await teachers.add(data);
-    // console.log(await teachers.read(teacherId));
-    // await teachers.update(teacherId, data2);
-    // console.log(await teachers.read(teacherId));    
+    console.log(await teachers.read(teacherId));
+    await teachers.update(teacherId, data1);
+    console.log(await teachers.read(teacherId));    
     // // console.log(teachers.remove(teacherId));
 
     //-----checking pupil
@@ -115,7 +115,7 @@ let data2 = {'description': 'poop',
     const lms = new LMSModel();
     console.log(await lms.add(history));
     // console.log(await lms.readAll());
-    // console.log(await lms.verify(history));
+    console.log(await lms.verify(history));
     // console.log(await lms.remove(history));
     // console.log(await lms.readAll());
 
@@ -155,7 +155,7 @@ let data2 = {'description': 'poop',
     const oliver = await gradebooks.read(gradebookId, pupilId);
     console.log(oliver);
     const students = await gradebooks.readAll(gradebookId);
-    console.log(students);
+    console.log(students)
     console.log(await gradebooks.clear());
     console.log(gradebooks);
 })();

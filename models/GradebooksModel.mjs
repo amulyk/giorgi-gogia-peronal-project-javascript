@@ -77,6 +77,8 @@ export class GradebooksModel {
             for(let i = 0; i < students.pupils.length; i++) {
                 if(pupilId === this.records.pupilId) {
                     resolve(students.pupils[i]);
+                } else {
+                    reject('Incorrect id');
                 }
             }
         });
